@@ -1,15 +1,29 @@
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/yamukja?serverTimezone=Asia/Seoul
-    username: root
-    password: 0000abc
+    url: jdbc:mariadb://49.50.166.122:3306/yamukja
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: ${REDIS_PASSWORD}
+
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
-    database: mysql
-    database-platform: org.hibernate.spatial.dialect.mysql.MySQL56InnoDBSpatialDialect
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+      ddl-auto: update # (1) 스키마 생성
+    show-sql: true # (2) SQL 쿼리 출력
+    generate-ddl: true
     properties:
       hibernate:
         format_sql: true
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
+  token:
+    access-expiration-time: ${ACCESS_EXPIRATION_TIME}
+    refresh-expiration-time: ${REFRESH_EXPIRATION_TIME}

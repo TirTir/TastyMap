@@ -1,7 +1,7 @@
 package backend.TastyMap.user.services;
 
+import backend.TastyMap.common.constants.ErrorCode;
 import backend.TastyMap.common.exception.GeneralException;
-import backend.TastyMap.user.constants.ErrorMessage;
 import backend.TastyMap.user.dto.JoinRequestDto;
 import backend.TastyMap.user.dto.UpdateRequestDto;
 import backend.TastyMap.user.entity.User;
@@ -12,7 +12,6 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.PrecisionModel;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +30,7 @@ public class UserService {
     public void join(JoinRequestDto request){
         // 계정 중복 확인
         if (userRepository.existsByUserId(request.getUserId())) {
-            throw new GeneralException(ErrorMessage.ALREADY_JOINED_USER, HttpStatus.CONFLICT);
+            throw new GeneralException(ErrorCode.USER_ALREADY_EXIST);
         }
 
         // 유저 생성
@@ -48,7 +47,7 @@ public class UserService {
     public void update(UpdateRequestDto request){
         // 계정 확인
         User user = userRepository.findByUserId(request.getUserId())
-                .orElseThrow(() -> new GeneralException(ErrorMessage.NOT_EXIST_USER, HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
 
         // 위치 정보 생성
         Double latitude = request.getLatitude();

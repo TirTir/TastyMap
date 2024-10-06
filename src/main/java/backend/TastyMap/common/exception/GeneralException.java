@@ -1,24 +1,18 @@
 package backend.TastyMap.common.exception;
 
-import backend.TastyMap.common.dto.ErrorResponseDto;
+import backend.TastyMap.common.constants.ErrorCode;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-@Data
-@Builder
-public class GeneralException extends RuntimeException {
-    private final String message;
-    private final HttpStatus status;
+@Getter
+public class GeneralException extends RuntimeException{
 
-    public GeneralException(String message, HttpStatus status) {
-        super(message);
-        this.message = message;
-        this.status = status;
-    }
+    private final ErrorCode errorCode;
 
-    // ErrorResponseDto로 변환
-    public ErrorResponseDto toErrorResponseDto() {
-        return new ErrorResponseDto(this.message, this.status);
+    public GeneralException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
     }
 }
